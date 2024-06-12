@@ -1,20 +1,58 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
+<ion-header>
+	<ion-toolbar color="tertiary">
+		<ion-title> QR Ionic </ion-title>
+	</ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding ion-text-center">
+	<!-- === segments === -->
+	<ion-segment [(ngModel)]="segment" mode="ios">
+		<ion-segment-button value="scan">
+			<ion-label>Escáner QR</ion-label>
+		</ion-segment-button>
+		<ion-segment-button value="generate">
+			<ion-label>Generador QR</ion-label>
+		</ion-segment-button>
+	</ion-segment>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+	<!-- === Scan QR === -->
+	<div *ngIf="segment == 'scan'">if segment is equal to scan</div>
+
+	<!-- === Generate QR === -->
+	<div class="segment" *ngIf="segment == 'generate'">
+		<div class="segment-content">
+
+			<div id="qrImage">
+				<div class="d-flex-center">
+					<div class="d-flex-center qr-wrapper">
+						<qr-code
+							*ngIf="qrText"
+							[value]="qrText"
+							size="200"
+							errorCorrectionLevel="M"
+						/>
+						<img *ngIf="!qrText" class="qr-placeholder" src="assets/images/qr.webp" alt="placeholder">
+					</div>
+				</div>
+				<div class="ion-padding-top">{{qrText}}</div>
+			</div>
+
+			<ion-textarea
+				label="Escribe lo que quieres convertir a código QR"
+				labelPlacement="stacked"
+				fill="outline"
+				class="ion-padding"
+				[(ngModel)]="qrText"
+				rows="4"
+				[autoGrow]="true"
+			></ion-textarea>
+
+			<!-- === Generate QR === -->
+			<ion-button (click)="captureScreen()" *ngIf="qrText" class="submit" expand="block">
+				Compartir
+				<ion-icon slot="end" name="share-social-outline"></ion-icon>
+			</ion-button>
+
+		</div>
+	</div>
 </ion-content>
